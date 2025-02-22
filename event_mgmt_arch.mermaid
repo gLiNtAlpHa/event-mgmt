@@ -1,0 +1,73 @@
+graph TD
+    subgraph Client Layer
+        WC[Web Client]
+        MC[Mobile Client]
+    end
+
+    subgraph Presentation Layer
+        JSP[JSP Pages]
+        Servlets[Servlet Controllers]
+    end
+
+    subgraph Service Layer
+        ES[Event Service]
+        US[User Service]
+        RS[RSVP Service]
+        MS[ML Service]
+        QS[QR Code Service]
+        ES[Email Service]
+    end
+
+    subgraph Data Access Layer
+        GD[Generic DAO]
+        subgraph Entity Models
+            EM[Event Model]
+            UM[User Model]
+            RM[RSVP Model]
+            TM[Training Model]
+        end
+    end
+
+    subgraph External Services
+        WEKA[WEKA API]
+        SMTP[SMTP Server]
+    end
+
+    subgraph Persistence Layer
+        PG[(PostgreSQL DB)]
+    end
+
+    %% Client to Presentation
+    WC --> JSP
+    MC --> JSP
+    JSP --> Servlets
+
+    %% Presentation to Service
+    Servlets --> ES
+    Servlets --> US
+    Servlets --> RS
+    Servlets --> QS
+
+    %% Service to DAO
+    ES --> GD
+    US --> GD
+    RS --> GD
+    MS --> GD
+
+    %% Service Interactions
+    ES --> MS
+    RS --> QS
+    RS --> ES
+    
+    %% External Service Integration
+    MS --> WEKA
+    ES --> SMTP
+    
+    %% DAO to Models
+    GD --> EM
+    GD --> UM
+    GD --> RM
+    GD --> TM
+    
+    %% Persistence
+    GD --> PG
