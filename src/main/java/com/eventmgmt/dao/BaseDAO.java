@@ -1,14 +1,11 @@
 package com.eventmgmt.dao;
 
 import com.eventmgmt.model.BaseEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -124,14 +121,12 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      * 
      * @return A list of all entities
      */
+    @SuppressWarnings("unchecked")
     public List<T> findAll() {
         return executeInTransaction(em -> {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
-            Root<T> rootEntry = cq.from(entityClass);
-            CriteriaQuery<T> all = cq.select(rootEntry);
-            TypedQuery<T> allQuery = em.createQuery(all);
-            return allQuery.getResultList();
+            String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
+            Query query = em.createQuery(jpql);
+            return query.getResultList();
         });
     }
 
@@ -142,16 +137,14 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      * @param limit  The maximum number of results to return
      * @return A list of entities for the requested page
      */
+    @SuppressWarnings("unchecked")
     public List<T> findAll(int offset, int limit) {
         return executeInTransaction(em -> {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
-            Root<T> rootEntry = cq.from(entityClass);
-            CriteriaQuery<T> all = cq.select(rootEntry);
-            TypedQuery<T> allQuery = em.createQuery(all);
-            allQuery.setFirstResult(offset);
-            allQuery.setMaxResults(limit);
-            return allQuery.getResultList();
+            String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
+            Query query = em.createQuery(jpql);
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+            return query.getResultList();
         });
     }
 
@@ -162,10 +155,9 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      */
     public Long count() {
         return executeInTransaction(em -> {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-            cq.select(cb.count(cq.from(entityClass)));
-            return em.createQuery(cq).getSingleResult();
+            String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e";
+            Query query = em.createQuery(jpql);
+            return (Long) query.getSingleResult();
         });
     }
 
@@ -189,7 +181,7 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
     /**
      * Deletes an entity.
      * 
-     * @param entity The entity to delete
+     * @param entity
      */
     public void delete(T entity) {
         executeWithoutResult(em -> {
@@ -218,9 +210,10 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      * @param params    Parameters for the query in name-value pairs
      * @return The list of results
      */
+    @SuppressWarnings("unchecked")
     protected List<T> executeNamedQuery(String queryName, Object... params) {
         return executeInTransaction(em -> {
-            TypedQuery<T> query = em.createNamedQuery(queryName, entityClass);
+            Query query = em.createNamedQuery(queryName);
             for (int i = 0; i < params.length; i += 2) {
                 query.setParameter(params[i].toString(), params[i + 1]);
             }
@@ -235,9 +228,10 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      * @param params Parameters for the query in name-value pairs
      * @return The list of results
      */
+    @SuppressWarnings("unchecked")
     protected List<T> executeQuery(String jpql, Object... params) {
         return executeInTransaction(em -> {
-            TypedQuery<T> query = em.createQuery(jpql, entityClass);
+            Query query = em.createQuery(jpql);
             for (int i = 0; i < params.length; i += 2) {
                 query.setParameter(params[i].toString(), params[i + 1]);
             }

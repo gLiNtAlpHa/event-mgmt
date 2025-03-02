@@ -2,15 +2,10 @@ package com.eventmgmt.dao;
 
 import com.eventmgmt.model.Event;
 import com.eventmgmt.model.EventType;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,11 +69,11 @@ public class EventDAO extends BaseDAO<Event, String> {
      * @param limit The maximum number of events to return
      * @return A list of upcoming events
      */
+    @SuppressWarnings("unchecked")
     public List<Event> findUpcomingEvents(int limit) {
         return executeInTransaction(em -> {
-            TypedQuery<Event> query = em.createQuery(
-                    "SELECT e FROM Event e WHERE e.eventDate > CURRENT_TIMESTAMP ORDER BY e.eventDate ASC",
-                    Event.class);
+            Query query = em.createQuery(
+                    "SELECT e FROM Event e WHERE e.eventDate > CURRENT_TIMESTAMP ORDER BY e.eventDate ASC");
             query.setMaxResults(limit);
             return query.getResultList();
         });
@@ -90,15 +85,13 @@ public class EventDAO extends BaseDAO<Event, String> {
      * @return A list of events with remaining capacity
      */
     public List<Event> findEventsWithAvailableCapacity() {
-        // This is a simplified example. In a real application, you would need to check
-        // against registrations or bookings to determine available capacity.
         return executeQuery(
                 "SELECT e FROM Event e WHERE e.capacity > 0");
     }
 
     /**
      * Search for events based on multiple criteria.
-     * Uses the JPA Criteria API for dynamic query building.
+     * Uses JPQL with dynamic conditions for flexibility.
      * 
      * @param name      Event name (partial match)
      * @param location  Event location (partial match)
@@ -107,39 +100,57 @@ public class EventDAO extends BaseDAO<Event, String> {
      * @param endDate   Maximum event date
      * @return A list of events matching the specified criteria
      */
+    @SuppressWarnings("unchecked")
     public List<Event> searchEvents(String name, String location, EventType type,
             LocalDateTime startDate, LocalDateTime endDate) {
         return executeInTransaction(em -> {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Event> cq = cb.createQuery(Event.class);
-            Root<Event> event = cq.from(Event.class);
-
-            List<Predicate> predicates = new ArrayList<>();
+            StringBuilder jpql = new StringBuilder("SELECT e FROM Event e WHERE 1=1");
 
             if (name != null && !name.isEmpty()) {
-                predicates.add(cb.like(cb.lower(event.get("name")), "%" + name.toLowerCase() + "%"));
+                jpql.append(" AND LOWER(e.name) LIKE LOWER(:name)");
             }
 
             if (location != null && !location.isEmpty()) {
-                predicates.add(cb.like(cb.lower(event.get("location")), "%" + location.toLowerCase() + "%"));
+                jpql.append(" AND LOWER(e.location) LIKE LOWER(:location)");
             }
 
             if (type != null) {
-                predicates.add(cb.equal(event.get("type"), type));
+                jpql.append(" AND e.type = :type");
             }
 
             if (startDate != null) {
-                predicates.add(cb.greaterThanOrEqualTo(event.get("eventDate"), startDate));
+                jpql.append(" AND e.eventDate >= :startDate");
             }
 
             if (endDate != null) {
-                predicates.add(cb.lessThanOrEqualTo(event.get("eventDate"), endDate));
+                jpql.append(" AND e.eventDate <= :endDate");
             }
 
-            cq.where(predicates.toArray(new Predicate[0]));
-            cq.orderBy(cb.asc(event.get("eventDate")));
+            jpql.append(" ORDER BY e.eventDate ASC");
 
-            return em.createQuery(cq).getResultList();
+            Query query = em.createQuery(jpql.toString());
+
+            if (name != null && !name.isEmpty()) {
+                query.setParameter("name", "%" + name.toLowerCase() + "%");
+            }
+
+            if (location != null && !location.isEmpty()) {
+                query.setParameter("location", "%" + location.toLowerCase() + "%");
+            }
+
+            if (type != null) {
+                query.setParameter("type", type);
+            }
+
+            if (startDate != null) {
+                query.setParameter("startDate", startDate);
+            }
+
+            if (endDate != null) {
+                query.setParameter("endDate", endDate);
+            }
+
+            return query.getResultList();
         });
     }
 }

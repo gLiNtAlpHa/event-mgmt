@@ -6,18 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlyHigh - Event Listing</title>
+    <title>VibeHalo - Event Listing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 </head>
-<body class="bg-amber-100">
+<body class="bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header Section -->
         <header class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold">FlyHigh</h1>
+                <h1 class="text-3xl font-bold">VibeHalo</h1>
             </div>
             <div class="flex items-center space-x-4">
                 <nav class="hidden md:flex items-center space-x-4">
@@ -218,10 +218,11 @@
                     return response.json();
                 })
                 .then(data => {
+                    console.log('Fetched events:', data);
                     displayEvents(data);
                 })
                 .catch(error => {
-                    console.error('Error fetching events:', error);
+                    console.log('Error fetching events:', error);
                     eventsGrid.innerHTML = `
                         <div class="col-span-4 text-center py-8">
                             <p class="text-red-500">Failed to load events. Please try again.</p>

@@ -22,23 +22,23 @@
   <dependencies>
 
     <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+
+
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.12.1</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.1.0</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>jakarta.platform</groupId>
-      <artifactId>jakarta.jakartaee-api</artifactId>
-      <version>11.0.0-M5</version>
     </dependency>
 
 
@@ -54,15 +54,6 @@
       <artifactId>jstl</artifactId>
       <version>1.2</version>
       <type>pom</type>
-    </dependency>
-
-    
-
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>3.4.3</version>
     </dependency>
 
 
@@ -89,12 +80,6 @@
       <artifactId>hibernate-entitymanager</artifactId>
       <version>6.0.0.Alpha7</version>
       <type>pom</type>
-    </dependency>
-
-     <dependency>
-        <groupId>jakarta.persistence</groupId>
-        <artifactId>jakarta.persistence-api</artifactId>
-        <version>3.1.0</version>
     </dependency>
 
     <dependency>
