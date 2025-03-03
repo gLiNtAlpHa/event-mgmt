@@ -33,27 +33,72 @@
             </div>
             <div class="flex items-center space-x-4">
                 <a href="#" class="text-gray-800">Log in</a>
-                <a href="#" class="bg-black text-white px-4 py-2 rounded-full">Sign up</a>
+                <a href="#" class="bg-black text-white px-4 py-2 rounded-md">Host an Event</a>
             </div>
         </header>
 
         <!-- Hero Section -->
-        <div class="relative rounded-xl overflow-hidden mb-12 bg-gray-200">
-            <div class="absolute inset-0 bg-gradient-to-r from-gray-200 to-transparent"></div>
-            <div class="relative p-8 md:p-12 h-80 flex flex-col justify-between">
-                <div>
-                    <p class="text-gray-600 mb-2">— Blue Mountain Country Club and Resort</p>
-                    <h2 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Treebo Tryst</h2>
-                    <p class="text-gray-800 font-medium">~02°C Very Cold</p>
+        <div class="relative rounded-xl overflow-hidden mb-12 h-80">
+            <!-- Carousel container -->
+            <div id="heroCarousel" class="h-full w-full">
+                <!-- Slide 1 -->
+                <div class="carousel-item absolute inset-0 opacity-100 transition-opacity duration-500" 
+                     style="background-image: url('https://img.freepik.com/free-vector/scheduling-planning-setting-goals-schedule-timing-workflow-optimization-taking-note-assignment-businesswoman-with-timetable-cartoon-character-vector-isolated-concept-metaphor-illustration_335657-2851.jpg?uid=R71886669&ga=GA1.1.658547807.1740966066&semt=ais_hybrid'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-transparent"></div>
+                    <div class="relative p-8 md:p-12 h-full flex flex-col justify-between">
+                        <div>
+                            <p class="text-white/80 mb-2">Effortless Planning, Seamless Execution</p>
+                            <h2 class="text-5xl md:text-6xl font-bold text-white mb-4">Host Unforgettable Events</h2>
+                            <p class="text-white font-medium">From luxurious dinners to corporate galas, VibeHalo ensures your event is a masterpiece.  
+                                Plan, manage, and execute like a pro with our all-in-one event management platform.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex space-x-2">
-                    <button class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
-                        <i class="fas fa-chevron-left text-xs"></i>
-                    </button>
-                    <button class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow">
-                        <i class="fas fa-chevron-right text-xs"></i>
-                    </button>
+                
+                <!-- Slide 2 -->
+                <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-500" 
+                     style="background-image: url('https://img.freepik.com/free-vector/water-contamination-detection-system-abstract-concept-illustration_335657-3772.jpg?uid=R71886669&ga=GA1.1.658547807.1740966066&semt=ais_hybrid'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-transparent"></div>
+                    <div class="relative p-8 md:p-12 h-full flex flex-col justify-between">
+                        <div>
+                            <p class="text-white/80 mb-2">Smart Automation, Smooth Coordination</p>
+                            <h2 class="text-5xl md:text-6xl font-bold text-white mb-4">Next-Gen Event Management</h2>
+                            <p class="text-white font-medium">AI-driven tools help you track registrations, send notifications, 
+                                so you can focus on creating epic experiences.</p>
+                        </div>
+                    </div>
                 </div>
+                
+                <!-- Slide 3 -->
+                <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-500" 
+                     style="background-image: url('https://img.freepik.com/free-vector/hand-drawn-garden-party-illustration_52683-89332.jpg?uid=R71886669&ga=GA1.1.658547807.1740966066&semt=ais_hybrid'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/70 to-transparent"></div>
+                    <div class="relative p-8 md:p-12 h-full flex flex-col justify-between">
+                        <div>
+                            <p class="text-white/80 mb-2">Memories That Last a Lifetime</p>
+                            <h2 class="text-5xl md:text-6xl font-bold text-white mb-4">Turn Moments Into Magic</h2>
+                            <p class="text-white font-medium"> Whether it's a high-energy concert or an intimate wedding, VibeHalo takes care of the details.  
+                                You bring the vision, we bring the vibe. Let’s make it legendary. 🎉</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel Navigation -->
+            <div class="absolute bottom-8 left-8 md:left-12 flex space-x-2 z-10">
+                <button id="prevBtn" class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button id="nextBtn" class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="absolute bottom-8 right-8 md:right-12 flex space-x-2 z-10">
+                <button data-slide="0" class="carousel-indicator w-2 h-2 rounded-full bg-white opacity-100"></button>
+                <button data-slide="1" class="carousel-indicator w-2 h-2 rounded-full bg-white opacity-50"></button>
+                <button data-slide="2" class="carousel-indicator w-2 h-2 rounded-full bg-white opacity-50"></button>
             </div>
         </div>
 
@@ -171,6 +216,62 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('heroCarousel');
+            const slides = carousel.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+            
+            function showSlide(index) {
+                slides.forEach(slide => {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                });
+                
+                // Update indicators
+                indicators.forEach((indicator, i) => {
+                    if (i === index) {
+                        indicator.classList.remove('opacity-50');
+                        indicator.classList.add('opacity-100');
+                    } else {
+                        indicator.classList.remove('opacity-100');
+                        indicator.classList.add('opacity-50');
+                    }
+                });
+                
+                slides[index].classList.remove('opacity-0');
+                slides[index].classList.add('opacity-100');
+                
+                currentSlide = index;
+            }
+            
+            prevBtn.addEventListener('click', () => {
+                let newIndex = currentSlide - 1;
+                if (newIndex < 0) newIndex = totalSlides - 1;
+                showSlide(newIndex);
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                let newIndex = currentSlide + 1;
+                if (newIndex >= totalSlides) newIndex = 0;
+                showSlide(newIndex);
+            });
+            
+            // indicators
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            setInterval(() => {
+                let newIndex = currentSlide + 1;
+                if (newIndex >= totalSlides) newIndex = 0;
+                showSlide(newIndex);
+            }, 5000);
+            
             flatpickr("#dateInput", {
                 dateFormat: "Y-m-d",
                 defaultDate: "${currentDate}",
@@ -193,6 +294,7 @@
             document.getElementById('dateInput').addEventListener('change', function() {
                 document.getElementById('searchBtn').click();
             });
+            fetchEvents();
         });
 
         function fetchEvents(location = '', type = '', date = '') {
@@ -215,7 +317,22 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return response.json();
+                    return response.text().then(text => {
+                        console.log('Raw response:', text);
+                        // If text is empty, throw a specific error
+                        if (!text.trim()) {
+                            throw new Error('Empty response from server');
+                        }
+                        // Try to parse the text as JSON
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSON parse error:', e);
+                            console.error('Response that failed to parse:', text);
+                            throw new Error('Invalid JSON response');
+                        }
+                    });
+                   
                 })
                 .then(data => {
                     console.log('Fetched events:', data);

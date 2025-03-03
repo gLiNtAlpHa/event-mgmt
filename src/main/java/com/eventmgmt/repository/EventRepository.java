@@ -157,7 +157,6 @@ public class EventRepository {
     public List<Event> getFilteredEvents(String location, String activity, String dateStr) {
         EventType type = null;
 
-        // Try to parse activity string to EventType if provided
         if (activity != null && !activity.trim().isEmpty()) {
             try {
                 type = EventType.valueOf(activity.toUpperCase());
@@ -166,7 +165,6 @@ public class EventRepository {
             }
         }
 
-        // Parse date if provided
         LocalDate date = null;
         if (dateStr != null && !dateStr.trim().isEmpty()) {
             try {

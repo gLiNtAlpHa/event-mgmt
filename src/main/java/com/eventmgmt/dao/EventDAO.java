@@ -103,54 +103,62 @@ public class EventDAO extends BaseDAO<Event, String> {
     @SuppressWarnings("unchecked")
     public List<Event> searchEvents(String name, String location, EventType type,
             LocalDateTime startDate, LocalDateTime endDate) {
-        return executeInTransaction(em -> {
-            StringBuilder jpql = new StringBuilder("SELECT e FROM Event e WHERE 1=1");
+        try {
+            return executeInTransaction(em -> {
+                StringBuilder jpql = new StringBuilder("SELECT e FROM Event e WHERE 1=1");
 
-            if (name != null && !name.isEmpty()) {
-                jpql.append(" AND LOWER(e.name) LIKE LOWER(:name)");
-            }
+                if (name != null && !name.isEmpty()) {
+                    jpql.append(" AND LOWER(e.name) LIKE LOWER(:name)");
+                }
 
-            if (location != null && !location.isEmpty()) {
-                jpql.append(" AND LOWER(e.location) LIKE LOWER(:location)");
-            }
+                if (location != null && !location.isEmpty()) {
+                    jpql.append(" AND LOWER(e.location) LIKE LOWER(:location)");
+                }
 
-            if (type != null) {
-                jpql.append(" AND e.type = :type");
-            }
+                if (type != null) {
+                    jpql.append(" AND e.type = :type");
+                }
 
-            if (startDate != null) {
-                jpql.append(" AND e.eventDate >= :startDate");
-            }
+                if (startDate != null) {
+                    jpql.append(" AND e.eventDate >= :startDate");
+                }
 
-            if (endDate != null) {
-                jpql.append(" AND e.eventDate <= :endDate");
-            }
+                if (endDate != null) {
+                    jpql.append(" AND e.eventDate <= :endDate");
+                }
 
-            jpql.append(" ORDER BY e.eventDate ASC");
+                jpql.append(" ORDER BY e.eventDate ASC");
 
-            Query query = em.createQuery(jpql.toString());
+                Query query = em.createQuery(jpql.toString());
 
-            if (name != null && !name.isEmpty()) {
-                query.setParameter("name", "%" + name.toLowerCase() + "%");
-            }
+                if (name != null && !name.isEmpty()) {
+                    query.setParameter("name", "%" + name.toLowerCase() + "%");
+                }
 
-            if (location != null && !location.isEmpty()) {
-                query.setParameter("location", "%" + location.toLowerCase() + "%");
-            }
+                if (location != null && !location.isEmpty()) {
+                    query.setParameter("location", "%" + location.toLowerCase() + "%");
+                }
 
-            if (type != null) {
-                query.setParameter("type", type);
-            }
+                if (type != null) {
+                    query.setParameter("type", type);
+                }
 
-            if (startDate != null) {
-                query.setParameter("startDate", startDate);
-            }
+                if (startDate != null) {
+                    query.setParameter("startDate", startDate);
+                }
 
-            if (endDate != null) {
-                query.setParameter("endDate", endDate);
-            }
+                if (endDate != null) {
+                    query.setParameter("endDate", endDate);
+                }
 
-            return query.getResultList();
-        });
+                return query.getResultList();
+            });
+
+        } catch (Exception e) {
+            System.err.println("Error in findAll: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+
     }
 }

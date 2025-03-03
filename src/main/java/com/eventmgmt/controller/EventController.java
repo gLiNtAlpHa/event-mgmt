@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.Collections;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -236,7 +237,13 @@ public class EventController extends HttpServlet {
             events = eventRepository.getFilteredEvents(location, activity, dateStr);
         }
 
-        response.getWriter().print(gson.toJson(events));
+        String jsonResponse = gson.toJson(events != null ? events : Collections.emptyList());
+        System.out.println("Sending JSON response: " + jsonResponse);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(jsonResponse);
+        response.getWriter().flush();
     }
 
     /**

@@ -139,13 +139,22 @@ public abstract class BaseDAO<T extends BaseEntity, ID> {
      */
     @SuppressWarnings("unchecked")
     public List<T> findAll(int offset, int limit) {
-        return executeInTransaction(em -> {
-            String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
-            Query query = em.createQuery(jpql);
-            query.setFirstResult(offset);
-            query.setMaxResults(limit);
-            return query.getResultList();
-        });
+        try {
+            return executeInTransaction(em -> {
+                String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e";
+                Query query = em.createQuery(jpql);
+                query.setFirstResult(offset);
+                query.setMaxResults(limit);
+                List<T> result = query.getResultList();
+                System.out.println("Found " + result.size() + " results" + result);
+                return result;
+            });
+        } catch (Exception e) {
+            System.err.println("Error in findAll: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+
     }
 
     /**
