@@ -1,9 +1,12 @@
-# 🚀 Event MGMT Web App 😎
+# 🚀 VibeHalo Event MGMT Web App 😎
 
-## 🛠️ TL;DR
+VibeHalo is more than just an event management app —it's a whole mood.  
+Think **seamless planning**, **effortless coordination**, and **next-level
+vibes** all in one place.
 
-A dope, scalable web app running on **Tomcat** with layers that keep things
-clean and modular. This ain't spaghetti code, it's structured AF.
+A dope, scalable web app running on **Tomcat**, with layers that keep things
+clean and modular.  
+This ain't spaghetti code—it's structured AF. 🔥
 
 ## 🔥 Architecture Breakdown
 
@@ -72,6 +75,16 @@ Where the magic happens:
 mvn clean package  # Build the app
 cp target/app.war $TOMCAT_HOME/webapps/  # Deploy the war
 $TOMCAT_HOME/bin/startup.sh  # Start Tomcat
+
+```
+
+## 🚀 Quick Reminder!
+
+yo fam, before you hit that **run** button, don’t forget to flex this command to
+generate the necessary Tailwind CSS, or your styles will be missing in action!
+
+```sh
+npx tailwindcss -i ./src/main/webapp/css/input.css -o ./src/main/webapp/css/output.css
 ```
 
 Boom! Open `http://localhost:8080/app` in your browser. 🎉
