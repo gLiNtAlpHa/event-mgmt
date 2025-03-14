@@ -179,6 +179,22 @@ public class UserRepository {
     }
 
     /**
+     * Reset a user's password with secure verification and encryption.
+     * 
+     * @param userId The ID of the user
+     * @param newPassword The new password to set
+     * @return true if the password was changed successfully, false otherwise
+     */
+    public boolean resetPassword(String userId, String newPassword) {
+        return userDAO.findById(userId).map(user -> {
+            // Encrypt and set the new password
+            user.setPassword(PasswordUtil.encryptPassword(newPassword));
+            userDAO.save(user);
+            return true;
+        }).orElse(false);
+    }
+
+    /**
      * Adds an event to a user's created events.
      * 
      * @param userId The ID of the user

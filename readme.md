@@ -1,6 +1,6 @@
-# 🚀 VibeHalo Event MGMT Web App 😎
+# 🚀 Emmas Event MGMT Web App 😎
 
-VibeHalo is more than just an event management app —it's a whole mood.  
+Emmas is more than just an event management app —it's a whole mood.  
 Think **seamless planning**, **effortless coordination**, and **next-level
 vibes** all in one place.
 
